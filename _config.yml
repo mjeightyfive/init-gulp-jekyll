@@ -1,0 +1,3 @@
+name: Init Jekyll
+exclude: ['node_modules', 'gulpfile.js', 'package.json']
+# keep_files: ['css', 'js']
