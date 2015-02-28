@@ -1,0 +1,63 @@
+---
+/Users/mjeightyfive/Projects/github/init-jekyll/app/_posts/2014-04-20-welcome-to-jekyll.markdown:
+  mtime: 2014-09-19 14:19:38.000000000 +01:00
+  deps:
+  - /Users/mjeightyfive/Projects/github/init-jekyll/app/_layouts/post.html
+  - /Users/mjeightyfive/Projects/github/init-jekyll/app/_layouts/default.html
+/Users/mjeightyfive/Projects/github/init-jekyll/app/apple-touch-icon-precomposed.png:
+  mtime: 2015-01-25 22:06:07.000000000 +00:00
+  deps: []
+/Users/mjeightyfive/Projects/github/init-jekyll/app/favicon.ico:
+  mtime: 2015-01-25 22:07:06.000000000 +00:00
+  deps: []
+/Users/mjeightyfive/Projects/github/init-jekyll/app/fonts/Karma-Regular.eot:
+  mtime: 2015-01-22 18:54:25.000000000 +00:00
+  deps: []
+/Users/mjeightyfive/Projects/github/init-jekyll/app/fonts/Karma-Regular.svg:
+  mtime: 2015-01-22 18:54:25.000000000 +00:00
+  deps: []
+/Users/mjeightyfive/Projects/github/init-jekyll/app/fonts/Karma-Regular.ttf:
+  mtime: 2015-01-22 18:54:25.000000000 +00:00
+  deps: []
+/Users/mjeightyfive/Projects/github/init-jekyll/app/fonts/Karma-Regular.woff:
+  mtime: 2015-01-22 18:54:25.000000000 +00:00
+  deps: []
+/Users/mjeightyfive/Projects/github/init-jekyll/app/fonts/Roboto-Thin.eot:
+  mtime: 2015-01-25 23:19:20.000000000 +00:00
+  deps: []
+/Users/mjeightyfive/Projects/github/init-jekyll/app/fonts/Roboto-Thin.svg:
+  mtime: 2015-01-25 23:19:20.000000000 +00:00
+  deps: []
+/Users/mjeightyfive/Projects/github/init-jekyll/app/fonts/Roboto-Thin.ttf:
+  mtime: 2015-01-25 23:19:20.000000000 +00:00
+  deps: []
+/Users/mjeightyfive/Projects/github/init-jekyll/app/fonts/Roboto-Thin.woff:
+  mtime: 2015-01-25 23:19:20.000000000 +00:00
+  deps: []
+/Users/mjeightyfive/Projects/github/init-jekyll/app/fonts/ZapfinoOne.eot:
+  mtime: 2015-01-25 23:23:29.000000000 +00:00
+  deps: []
+/Users/mjeightyfive/Projects/github/init-jekyll/app/fonts/ZapfinoOne.svg:
+  mtime: 2015-01-25 23:23:29.000000000 +00:00
+  deps: []
+/Users/mjeightyfive/Projects/github/init-jekyll/app/fonts/ZapfinoOne.ttf:
+  mtime: 2015-01-25 23:23:29.000000000 +00:00
+  deps: []
+/Users/mjeightyfive/Projects/github/init-jekyll/app/fonts/ZapfinoOne.woff:
+  mtime: 2015-01-25 23:23:29.000000000 +00:00
+  deps: []
+/Users/mjeightyfive/Projects/github/init-jekyll/app/images/touch/chrome-touch-icon-192x192.png:
+  mtime: 2015-01-25 22:05:11.000000000 +00:00
+  deps: []
+/Users/mjeightyfive/Projects/github/init-jekyll/app/images/touch/icon-128x128.png:
+  mtime: 2015-01-25 22:04:46.000000000 +00:00
+  deps: []
+/Users/mjeightyfive/Projects/github/init-jekyll/app/images/touch/ms-touch-icon-144x144-precomposed.png:
+  mtime: 2015-01-25 22:03:22.000000000 +00:00
+  deps: []
+/Users/mjeightyfive/Projects/github/init-jekyll/app/index.html:
+  mtime: 2015-02-27 23:09:10.000000000 +00:00
+  deps: []
+/Users/mjeightyfive/Projects/github/init-jekyll/app/_layouts/post.html:
+  mtime: 2015-02-27 00:15:25.000000000 +00:00
+  deps: []
