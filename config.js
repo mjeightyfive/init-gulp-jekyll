@@ -42,7 +42,8 @@ var ignoredCssClasses = [
     /:focus/,
     /:checked/,
     /.active/,
-    /.open/
+    /.open/,
+    /.pure-img/
 ];
 
 var autoprefixer_browsers = [

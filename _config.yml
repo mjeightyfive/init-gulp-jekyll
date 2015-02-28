@@ -1,6 +1,4 @@
-name: Init Jekyll
+name: init-jekyll
 # permalink: /:categories/:year/:month/:day/:title
 exclude: ['node_modules', 'gulpfile.js', 'package.json']
-# BASE_PATH : false
-# ASSET_PATH : ['css', 'js']
 keep_files: ['css', 'js', 'files', 'fonts', 'images']
