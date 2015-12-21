@@ -1,25 +1,30 @@
 *,
 *:after,
 *:before {
-  @include box-sizing(border-box);
+    @include box-sizing(border-box);
 }
 
 body {
     @include Roboto-Thin;
 }
 
-.pure-g [class *= "pure-u"] {
-    @include Karma-Regular;
-    color: $light-grey;
+.pure-g [class *= 'pure-u'] {
     line-height: 1.2;
     padding: 1em;
+    color: $light-grey;
+    @include Karma-Regular;
 
     p {
         margin: 0;
     }
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     color: $dark-grey;
     @include Roboto-Thin;
 }
@@ -28,15 +33,14 @@ h1 {
     text-transform: uppercase;
 }
 
- a {
-    @include link-colors($grapefruit, $salmon);
-    text-decoration: none;
+a {
     font-weight: bold;
+    text-decoration: none;
     letter-spacing: -1px;
+    @include link-colors($grapefruit, $salmon);
 }
 
 .container {
-
     margin: 2em auto;
 
     @include breakpoint(768) {
@@ -49,28 +53,25 @@ h1 {
 }
 
 .header {
-
-
     .pure-menu-heading {
-        color: $black;
-        @include Zapfino;
         font-size: 22px;
         text-transform: none;
+        color: $black;
+        @include Zapfino;
     }
 
     .pure-menu {
-
         li {
             a,
             a:visited,
             a:link {
-                color: $dark-grey;
                 padding: auto;
+                color: $dark-grey;
             }
 
             a:hover {
-                background: $grapefruit;
                 color: $white;
+                background: $grapefruit;
             }
         }
     }
@@ -81,10 +82,9 @@ h1 {
 }
 
 .grid-example {
-
     div {
-        background: $medium;
         border: 1px solid white;
+        background: $medium;
     }
 
     p {
@@ -92,4 +92,3 @@ h1 {
         color: white;
     }
 }
-

@@ -1,6 +1,8 @@
+> WIP
+
 # init-jekyll
 
-Initial files for creating a jekyll site.
+> Initial files for creating a Jekyll based site.
 
 ## Install
 
@@ -8,11 +10,10 @@ Initial files for creating a jekyll site.
 
 # Usage
 
-run `gulp` for development mode or `gulp --live` to build optimised version
+run `gulp` for development mode or `gulp --production` to build optimised version
 
 ## Features
 - browser-sync
-- uncss
 - css autoprefixing
 - live reload
 - etc.

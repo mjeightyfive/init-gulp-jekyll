@@ -1,228 +1,163 @@
 'use strict';
 
 var gulp = require('gulp'),
-    glob = require('glob'),
-    $ = require('gulp-load-plugins')({
-        rename: {
-            'gulp-mocha-phantomjs': 'gmphjs'
-        }
-    }),
     del = require('del'),
     sequence = require('run-sequence'),
-    streamqueue = require('streamqueue'),
+    browserify = require('browserify'),
+    bundler = require('gulp-watchify-factor-bundle'),
+    path = require('path'),
+    buffer = require('vinyl-buffer'),
     browserSync = require('browser-sync'),
-    reload = browserSync.reload,
     cp = require('child_process');
 
-var config = require('./config.js'),
-    live = $.util.env.live;
+var $ = require('gulp-load-plugins')();
 
-if (!live) {
-    live = false;
-}
+var fixtures = path.resolve.bind(path, __dirname),
+    reload = browserSync.reload,
+    live = $.util.env.live || false,
+    production = $.util.env.production || false,
+    watch = $.util.env.watch || false,
+    bs = $.util.env.bs || false;
 
-gulp.task('clean', del.bind(null, [config.paths.dist]));
+var paths = {
+    app: 'app',
+    dist: '_site',
+    bower: 'bower_components',
+    views: '*.html'
+};
+
+var files = {
+    scss: paths.app + '/scss/**/*.scss',
+    entries: [
+        paths.app + 'js/index.js',
+    ],
+    outputs: [
+        'index.js'
+    ]
+};
+
+var autoprefixer_browsers = [
+    'ie >= 9',
+    'ie_mob >= 10',
+    'ff >= 30',
+    'chrome >= 34',
+    'safari >= 7',
+    'opera >= 23',
+    'ios >= 7',
+    'android >= 4.4',
+    'bb >= 10'
+];
+
+gulp.task('clean', del.bind(null, [paths.dist]));
 
 gulp.task('default', ['clean'], function() {
 
-    if (live) {
-        sequence([
-                'styles',
-                'scripts',
-                'fonts',
-                'images',
-                'files'
-            ],
-            'serve',
-            'jshint',
-            'test'
-        );
+    if(production) {
+        live = true;
+        sequence('styles', 'scripts');
+    } else if(live && !bs) {
+        sequence(['build'], 'watch');
+    } else if(bs) {
+        sequence(['build'], 'serve', 'watch');
+    } else if(watch) {
+        sequence(['build'], 'watch');
     } else {
-        sequence([
-                'styles',
-                'scripts',
-                'fonts',
-                'images',
-                'files'
-            ],
-            'serve'
-        );
+        sequence('styles', 'scripts');
     }
-
 });
 
 gulp.task('jekyll-build', function(done) {
 
     var cmd = process.platform === 'win32' ? 'jekyll.bat' : 'jekyll';
 
-    return cp.spawn(cmd, ['build', '--config', '_config.yml', '--source=' + config.paths.app, '--destination=' + config.paths.dist], {
+    return cp.spawn(cmd, ['build', '--config', '_config.yml', '--source=' + paths.app, '--destination=' + paths.dist], {
         stdio: 'inherit'
     }).on('close', done);
 
 });
 
-gulp.task('html', ['jekyll-build'], function() {
-
-    var assets = {};
-
-    if (live) {
-        assets.css = gulp.src([config.paths.dist + '/css/style.css']);
-        assets.js = gulp.src([config.paths.dist + '/js/scripts.js']);
-    } else {
-        assets.css = gulp.src(config.files.css);
-        assets.js = gulp.src(config.files.js);
-    }
-
-    gulp.src(config.paths.dist + '/**/*.html')
-        .pipe($.inject(assets.css, {
-            transform: function(filepath, file) {
-                arguments[0] = file.path.replace(file.base, 'css/');
-                return $.inject.transform.apply($.inject.transform, arguments);
-            }
-        }))
-        .pipe($.inject(assets.js, {
-            transform: function(filepath, file) {
-                arguments[0] = file.path.replace(file.base, 'js/');
-                return $.inject.transform.apply($.inject.transform, arguments);
-            }
-        }))
-    // .pipe($.template(config.templateopts))
-    .pipe($.
-        if (live, $.minifyHtml(config.htmlopts)))
-        .pipe(gulp.dest(config.paths.dist))
-        .pipe(reload({
-            stream: true
-        }));
-});
+gulp.task('build', [
+    'styles',
+    'scripts'
+]);
 
 gulp.task('styles', function() {
-
-    return streamqueue({
-            objectMode: true
-        },
-        gulp.src(config.files.css)
-        .pipe($.cached())
-        .pipe($.sourcemaps.init())
-        .pipe($.sourcemaps.write()),
-        gulp.src(config.files.scss)
-        .pipe($.changed('css', {
-            extension: '.scss'
-        }))
-        .pipe($.sourcemaps.init())
+    gulp.src(files.scss)
+        .pipe($.if(!live, $.newer(files.scss)))
+        .pipe($.if(!live, $.sourcemaps.init()))
         .pipe($.sass({
-                outputStyle: 'expanded',
-                sourcemap: true,
-                sourcemapPath: config.files.scss
-            })
+            sourceMap: true
+        })
             .on('error', function(err) {
                 $.util.log('Sass error: ', $.util.colors.red(err.message));
                 $.util.beep();
                 this.emit('end');
             }))
-        .pipe($.sourcemaps.write())
-    )
-        .pipe($.
-            if (live, $.concat('style.css')))
-        .pipe($.
-            if (live, $.uncss({
-                html: glob.sync(config.paths.app + '/**/*.html'),
-                ignore: config.ignoredCssClasses
-            })))
-        .pipe($.autoprefixer(config.autoprefixer_browsers))
-        .pipe($.
-            if (live, $.csso({
-                keepSpecialComments: 0
-            })))
-        .pipe(gulp.dest(config.paths.dist + '/css'))
-        .pipe(reload({
+        .pipe($.if(!live, $.sourcemaps.write()))
+        .pipe($.if(live, $.minifyCss()))
+        .pipe(gulp.dest(paths.dist + '/css'))
+        .pipe($.autoprefixer({
+            browsers: autoprefixer_browsers
+        }))
+        .pipe($.if(!live, reload({
             stream: true
-        }));
+        })));
+
+});
+
+var resolvedPathsEntries = [],
+    resolvedPathsOutputs = [];
+
+files.entries.forEach(function(entry) {
+    resolvedPathsEntries.push(fixtures(entry));
+});
+
+files.outputs.forEach(function(output) {
+    resolvedPathsOutputs.push(output);
 });
 
 gulp.task('scripts', function() {
 
-    gulp.src(config.files.js)
-        .pipe($.cached())
-        .pipe($.
-            if (live, $.concat('scripts.js')))
-        .pipe($.
-            if (live, $.uglify()))
-        .pipe($.
-            if (live, $.size({
-                showFiles: true
-            })))
-        .pipe(gulp.dest(config.paths.dist + '/js'))
-        .pipe(reload({
-            stream: true
-        }));
-});
-
-gulp.task('fonts', function() {
-    return gulp.src(config.files.fonts)
-        .pipe(gulp.dest(config.paths.dist + '/fonts'))
-        .pipe($.size({
-            title: 'fonts'
-        }));
-});
-
-gulp.task('images', function() {
-    return gulp.src(config.paths.app + '/images/**/*')
-        .pipe($.cached($.imagemin({
-            progressive: true,
-            interlaced: true
-        })))
-        .pipe(gulp.dest(config.paths.dist + '/images'))
-        .pipe($.size({
-            title: 'images',
-            showFiles: true
-        }));
-});
-
-gulp.task('files', function() {
-    gulp.src(config.files.other)
-        .pipe(gulp.dest(config.paths.dist + '/files'));
-});
-
-gulp.task('serve', ['html'], function() {
-    browserSync({
-        open: false,
-        notify: true,
-        // Run as an https by uncommenting 'https: true'
-        // Note: this uses an unsigned certificate which on first access
-        //       will present a certificate warning in the browser.
-        // https: true,
-        server: {
-            baseDir: config.paths.dist
-        }
+    var b = browserify({
+        entries: resolvedPathsEntries,
+        debug: !live
     });
 
-    gulp.watch([config.paths.app + '/**/*.html', '_posts/*'], ['html']);
-    gulp.watch([config.paths.app + '/_scss/**/*.scss'], ['styles']);
-    gulp.watch([config.paths.app + '/_js/**/*.js'], ['scripts']);
-    gulp.watch([config.paths.app + '/images/**/*'], ['images']);
-    gulp.watch([config.paths.app + '/files/**/*'], ['files']);
+    var bundle = bundler(b, {
+        entries: resolvedPathsEntries,
+        outputs: resolvedPathsOutputs,
+        common: 'core.js'
+    },
+        // more transforms. Should always return a stream.
+        function(bundleStream) {
 
+            return bundleStream
+                .on('error', $.util.log.bind($.util, 'Browserify Error'))
+                .pipe(buffer())
+                .pipe($.if(!live, $.sourcemaps.init({
+                    loadMaps: true
+                })))
+                .pipe($.if(live, $.uglify()))
+                .pipe($.if(!live, $.sourcemaps.write()))
+                .pipe(gulp.dest(paths.dist + '/js'));
+        }
+    );
+
+    b.on('log', $.util.log);
+    return bundle();
 });
 
-gulp.task('jshint', function() {
-    return gulp.src(config.paths.app + '/js/**/*.js')
-        .pipe(reload({
-            stream: true,
-            once: true
-        }))
-        .pipe($.jshint())
-        .pipe($.jshint.reporter('jshint-stylish'));
-    // .pipe($.
-    //     if (!browserSync.active, $.jshint.reporter('fail')));
+gulp.task('serve', function() {
+    browserSync({
+        open: false,
+        notify: false,
+        proxy: "gb.hunter.dev",
+        port: 4444
+    });
 });
 
-function handleError(err) {
-    console.log(err.toString());
-}
-
-gulp.task('test', function() {
-    gulp.src('./tests/*.html')
-        .pipe($.gmphjs())
-        .on('error', handleError)
-        .emit('end');
+gulp.task('watch', function() {
+    gulp.watch([files.scss], ['styles']);
+    gulp.watch(paths.app + '/js/**/*.js', ['scripts', reload]);
+    gulp.watch(paths.views, reload);
 });
