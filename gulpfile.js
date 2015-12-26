@@ -27,9 +27,9 @@ var paths = {
 };
 
 var files = {
-    scss: paths.app + '/scss/**/*.scss',
+    scss: paths.app + '/_scss/**/*.scss',
     entries: [
-        paths.app + 'js/index.js',
+        paths.app + '/_js/index.js',
     ],
     outputs: [
         'index.js'
@@ -94,7 +94,7 @@ gulp.task('styles', function() {
                 this.emit('end');
             }))
         .pipe($.if(!live, $.sourcemaps.write()))
-        .pipe($.if(live, $.minifyCss()))
+        .pipe($.if(live, $.cssnano()))
         .pipe(gulp.dest(paths.dist + '/css'))
         .pipe($.autoprefixer({
             browsers: autoprefixer_browsers
@@ -151,8 +151,8 @@ gulp.task('serve', function() {
     browserSync({
         open: false,
         notify: false,
-        proxy: "gb.hunter.dev",
-        port: 4444
+        // proxy: "gb.hunter.dev",
+        // port: 4444
     });
 });
 
