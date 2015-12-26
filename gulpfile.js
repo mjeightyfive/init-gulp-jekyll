@@ -54,15 +54,15 @@ gulp.task('default', ['clean'], function() {
 
     if(production) {
         live = true;
-        sequence('styles', 'scripts');
+        sequence(['build', 'jekyll-build']);
     } else if(live && !bs) {
-        sequence(['build'], 'watch');
+        sequence(['build', 'jekyll-build'], 'watch');
     } else if(bs) {
-        sequence(['build'], 'serve', 'watch');
+        sequence(['build', 'jekyll-build'], 'serve', 'watch');
     } else if(watch) {
-        sequence(['build'], 'watch');
+        sequence(['build', 'jekyll-build'], 'watch');
     } else {
-        sequence('styles', 'scripts');
+        sequence(['build', 'jekyll-build']);
     }
 });
 

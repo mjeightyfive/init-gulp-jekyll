@@ -1,6 +1,6 @@
-> WIP
-
 # init-jekyll
+
+> WIP
 
 > Initial files for creating a Jekyll based site.
 
