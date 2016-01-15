@@ -1,4 +1,4 @@
-/* Base Color */
+// Base Color
 
 $white: #fff;
 $black: #000;
@@ -12,7 +12,7 @@ $dark-grey: #252525;
 
 $base: $grapefruit;
 
-/* Subtle Color Scheme */
+// Subtle Color Scheme
 
 $lighter: lighten(adjust-hue($base, 5), 10%);
 $light: lighten(adjust-hue($base, 10), 20%);
@@ -20,7 +20,7 @@ $medium: $base;
 $dark: darken(adjust-hue($base, -5), 10%);
 $darker: darken(adjust-hue($base, -10), 20%);
 
-/* Complementary Color Scheme */
+// Complementary Color Scheme
 
 $complement1: adjust-hue($base, 180);
 $complement2: darken(adjust-hue($base, 180), 5%);

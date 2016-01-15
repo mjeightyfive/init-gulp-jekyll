@@ -27,9 +27,15 @@ var paths = {
 };
 
 var files = {
+    views: [
+        paths.app + '/__includes/**/*.html',
+        paths.app + '/__layouts/**/*.html',
+        paths.app + '/**/*.html'
+    ],
     scss: paths.app + '/_scss/**/*.scss',
+    js: paths.app + '/_js/**/*.js',
     entries: [
-        paths.app + '/_js/index.js',
+        paths.app + '/_js/index.js'
     ],
     outputs: [
         'index.js'
@@ -148,16 +154,25 @@ gulp.task('scripts', function() {
 });
 
 gulp.task('serve', function() {
+
+    // browserSync.use(require("bs-snippet-injector"), {
+    //     // path to the file containing the closing </body> tag
+    //     file: "app/index.html"
+    // });
+
     browserSync({
         open: false,
         notify: false,
-        // proxy: "gb.hunter.dev",
-        // port: 4444
+        server: {
+            baseDir: '_site'
+        }
+    // proxy: "url.dev",
+    // port: 4444
     });
 });
 
 gulp.task('watch', function() {
     gulp.watch([files.scss], ['styles']);
-    gulp.watch(paths.app + '/js/**/*.js', ['scripts', reload]);
-    gulp.watch(paths.views, reload);
+    gulp.watch(files.js + '/_js/**/*.js', ['scripts', reload]);
+    gulp.watch(files.views, ['jekyll-build', reload]);
 });
