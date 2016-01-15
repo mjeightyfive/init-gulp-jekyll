@@ -1,7 +1,5 @@
 # init-jekyll
 
-> WIP
-
 > Initial files for creating a Jekyll based site.
 
 ## Install
@@ -13,10 +11,10 @@
 run `gulp` for development mode or `gulp --production` to build optimised version
 
 ## Features
+- Browserify with factor-bundle
 - browser-sync
-- css autoprefixing
+- css auto-prefixing
 - live reload
-- etc.
 
 ## License
 
