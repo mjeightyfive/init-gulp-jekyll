@@ -154,6 +154,12 @@ gulp.task('scripts', function() {
 });
 
 gulp.task('serve', function() {
+
+    // browserSync.use(require("bs-snippet-injector"), {
+    //     // path to the file containing the closing </body> tag
+    //     file: "app/index.html"
+    // });
+
     browserSync({
         open: false,
         notify: false,
